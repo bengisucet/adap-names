@@ -19,7 +19,7 @@ export class Name {
     private components: string[] = [];
 
     /** Expects that all Name components are properly masked */
-    // @methodtype constructor-method
+    // @methodtype initialization-method
     constructor(other: string[], delimiter?: string) {
         this.delimiter = delimiter ?? DEFAULT_DELIMITER;
         this.components = [...other];
