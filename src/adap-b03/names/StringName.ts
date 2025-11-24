@@ -8,64 +8,100 @@ export class StringName extends AbstractName {
     protected noComponents: number = 0;
 
     constructor(source: string, delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
+            this.delimiter = delimiter ?? DEFAULT_DELIMITER;
+            if(source.length === 0){
+                this.name = "";
+                this.noComponents = 0;
+            } else {
+                this.name = source;
+                const partsOfString = this.name.split(this.delimiter);
+                this.noComponents = partsOfString.length;
+            }
     }
 
-    public clone(): Name {
+
+
+    /*public isEqual(other: Name): boolean {
         throw new Error("needs implementation or deletion");
     }
-
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
+    //moved to abstractname
     public getHashCode(): number {
         throw new Error("needs implementation or deletion");
-    }
+    }*/
 
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
-    }
+     public isEmpty(): boolean {
+            return this.noComponents === 0;
+        }
 
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
-    }
+            return this.delimiter;
+        }
 
-    public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
-    }
+     public getNoComponents(): number {
+             return this.noComponents;
+        }
 
-    public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
-    }
+     public getComponent(x: number): string {
+            if(n < 0 || n >= this.noComponents){
+                throw new RangeError("Index out of range");
+            }
+            if(this.name.length === 0){
+                return "";
+            }
+            const partsOfString = this.name.split(this.delimiter);
+            return partsOfString[n];
+        }
 
-    public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
+    public setComponent(n: number, c: string): void {
+            if(n < 0 || n >= this.noComponents){q
+                throw new RangeError("Index out of range");
+            }
+            let partsOfString: string[];
+            if (this.name.length === 0) {
+                    partsOfString = [];
+            } else {
+                    partsOfString = this.name.split(this.delimiter);
+            }
 
-    public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
+            partsOfString[n] = c;
+            this.name = partsOfString.join(this.delimiter);
+            this.noComponents = partsOfString.length;
+        }
 
-    public append(c: string) {
-        throw new Error("needs implementation or deletion");
-    }
+        public insert(n: number, c: string): void {
+             if (n < 0 || n > this.noComponents) {
+                 throw new RangeError("Index out of range");
+             }
 
-    public remove(i: number) {
-        throw new Error("needs implementation or deletion");
-    }
+             let partsOfString: string[];
+             if (this.name.length === 0) {
+                 partsOfString = [];
+             } else {
+                 partsOfString = this.name.split(this.delimiter);
+             }
 
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
-    }
+             partsOfString.splice(n, 0, c);
+             this.name = partsOfString.join(this.delimiter);
+             this.noComponents = partsOfString.length;
+         }
 
+          public append(c: string): void {
+            this.insert(this.noComponents, c);
+        }
+
+        public remove(n: number): void {
+            if (n < 0 || n >= this.noComponents) {
+                throw new RangeError("Index out of range");
+            }
+
+            let partsOfString: string[];
+            if (this.name.length === 0) {
+                partsOfString = [];
+            } else {
+                partsOfString = this.name.split(this.delimiter);
+            }
+            partsOfString.splice(n, 1);
+            this.name = partsOfString.join(this.delimiter);
+            this.noComponents = partsOfString.length;
+        }
 }
