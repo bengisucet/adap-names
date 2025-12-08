@@ -1,6 +1,9 @@
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
 import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
+import { IllegalArgumentException } from "../common/IllegalArgumentException";
+import { MethodFailedException } from "../common/MethodFailedException";
+import { InvalidStateException } from "../common/InvalidStateException";
 
 export class StringName extends AbstractName {
 
@@ -8,64 +11,138 @@ export class StringName extends AbstractName {
     protected noComponents: number = 0;
 
     constructor(source: string, delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
+        this.delimiter = delimiter ?? DEFAULT_DELIMITER;
+        if(source.length === 0){
+            this.name = "";
+            this.noComponents = 0;
+        } else {
+            this.name = source;
+            const partsOfString = this.name.split(this.delimiter);
+            this.noComponents = partsOfString.length;
+        }
     }
 
-    public clone(): Name {
+
+    /*public isEqual(other: Name): boolean {
         throw new Error("needs implementation or deletion");
     }
-
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
+    //moved to abstractname
     public getHashCode(): number {
         throw new Error("needs implementation or deletion");
+    }*/
+
+    public clone(): Name {
+        return new StringName(this.name, this.delimiter);
     }
 
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
-    }
+     public isEmpty(): boolean {
+            return this.noComponents === 0;
+        }
 
     public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
-    }
+            return this.delimiter;
+        }
 
-    public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
-    }
+     public getNoComponents(): number {
+             return this.noComponents;
+        }
 
-    public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
-    }
+     public getComponent(x: number): string {
+         if(n < 0 || n >= this.noComponents){
+             throw new IllegalArgumentException("index out of range");
+         }
+         if(this.name.length === 0){
+             return "";
+         }
+         const partsOfString = this.name.split(this.delimiter);
+         return partsOfString[n];
+     }
 
-    public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
+    public setComponent(n: number, c: string): void {
+        if (i < 0 || i >= this.noComponents) {
+            throw new IllegalArgumentException("index out of range");
+        }
 
-    public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
-    }
+        const oldCount = this.noComp
+        let partsOfString: string[];
+        if (this.name.length === 0) {
+            partsOfString = [];
+        } else {
+            partsOfString = this.name.split(this.delimiter);
 
-    public append(c: string) {
-        throw new Error("needs implementation or deletion");
-    }
+        partsOfString[i] = c;
+        this.name = partsOfString.join(this.delimiter);
+        this.noComponents = partsOfString.
 
-    public remove(i: number) {
-        throw new Error("needs implementation or deletion");
-    }
+        MethodFailedException.assertCondition(this.noComponents === oldCount,
+            "setComponent mustnt change component count");
+        MethodFailedException.assertCondition(this.getComponent(i) === c,
+            "setComponent diddnt set requested component");
 
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
-    }
+        const n = this.getNoComponents();
 
+        if (n < 0 || (this.isEmpty() !== (n === 0))) {
+            throw new InvalidStateException("Name invariant violated after setComponent");
+        }
+    }
+}
+
+    public insert(n: number, c: string): void {
+        if (i < 0 || i > this.noComponents) {
+            throw new IllegalArgumentException("index out of range");
+        }
+
+        const oldCount = this.noComp
+        let partsOfString: string[];
+        if (this.name.length === 0) {
+             partsOfString = [];
+        } else {
+             partsOfString = this.name.split(this.delimiter);
+
+        partsOfString.splice(i, 0, c);
+        this.name = partsOfString.join(this.delimiter);
+        this.noComponents = partsOfString.
+
+         MethodFailedException.assertCondition(this.noComponents === oldCount + 1,
+             "insert must increas count by 1");
+
+         MethodFailedException.assertCondition(this.getComponent(i) === c,
+             "insert must place new component at index i");
+
+             const n = this.getNoComponents();
+             if (n < 0 || (this.isEmpty() !== (n === 0))) {
+                 throw new InvalidStateException("Name invariant violated after insert");
+             }
+        }}
+
+        public append(c: string): void {
+            this.insert(this.noComponents, c);
+        }
+
+        public remove(n: number): void {
+           if (i < 0 || i >= this.noComponents) {
+               throw new IllegalArgumentException("index out of range");
+           }
+
+           const oldCount = this.noComponents;
+
+           let partsOfString: string[];
+           if (this.name.length === 0) {
+               partsOfString = [];
+           } else {
+               partsOfString = this.name.split(this.delimiter);
+           }
+
+           partsOfString.splice(i, 1);
+           this.name = partsOfString.join(this.delimiter);
+           this.noComponents = partsOfString.length;
+
+           MethodFailedException.assertCondition(this.noComponents === oldCount - 1,
+              "remove must decrease component count by 1");
+
+           const count = this.getNoComponents();
+           if (count < 0 || (this.isEmpty() !== (count === 0))) {
+               throw new InvalidStateException("Name invariant violated after remove");
+           }
+       }
 }

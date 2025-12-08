@@ -20,4 +20,16 @@ export class Directory extends Node {
         this.childNodes.delete(cn); // Yikes! Should have been called remove
     }
 
+    public findNodes(bn: string): Set<Node> {
+        const result = super.findNodes(bn);
+
+        for (const child of this.childNodes) {
+             const childMatch = child.findNodes(bn);
+             for (const match of childMatch) {
+                 result.add(match);
+             }
+        }
+
+        return result;
+     }
 }

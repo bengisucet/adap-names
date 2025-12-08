@@ -1,5 +1,6 @@
 import { IllegalArgumentException } from "../common/IllegalArgumentException";
 import { InvalidStateException } from "../common/InvalidStateException";
+import { MethodFailedException } from "../common/MethodFailedException";
 
 import { Name } from "../names/Name";
 import { Directory } from "./Directory";
@@ -57,7 +58,20 @@ export class Node {
      * @param bn basename of node being searched for
      */
     public findNodes(bn: string): Set<Node> {
-        throw new Error("needs implementation or deletion");
+        if (bn == null) {
+            throw new IllegalArgumentException("empty basename");
+        }
+        const result = new Set<Node>();
+        const oldSize = result.size;
+
+        if (this.getBaseName() === bn) {
+            result.add(this);
+        }
+
+        MethodFailedException.assertCondition(result.size >= oldSize,
+                    "findNodes result size musnt get smaller");
+
+        return result;
     }
 
 }
